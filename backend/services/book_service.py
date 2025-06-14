@@ -167,6 +167,82 @@ class BookService:
         except Exception as e:
             logger.error(f"Error creating book: {e}")
             raise
+
+    def update_book(self, book_id: int, book_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        try:
+            existing_book = self.get_book_by_id(book_id)
+            if not existing_book:
+                return None
+            
+            fields = []
+            values = []
+            
+            field_mapping = {
+                'title': 'title',
+                'author': 'author',
+                'author_bio': 'author_bio',
+                'authors': 'authors',
+                'author_slug': 'author_slug',
+                'publisher': 'publisher',
+                'synopsis': 'synopsis',
+                'subjects': 'subjects',
+                'isbn13': 'isbn13',
+                'isbn10': 'isbn10',
+                'price': 'price',
+                'format': 'format',
+                'pages': 'pages',
+                'overview': 'overview',
+                'excerpt': 'excerpt'
+            }
+            
+            for api_field, db_field in field_mapping.items():
+                if api_field in book_data:
+                    fields.append(f"{db_field} = ?")
+                    values.append(book_data[api_field])
+            
+            if not fields:
+                raise ValueError("No valid fields provided for book update")
+            
+            values.append(book_id)
+            
+            query = f"""
+                UPDATE book 
+                SET {', '.join(fields)}
+                WHERE id = ?
+            """
+            
+            affected_rows = self.db_service.execute_update(query, values)
+            
+            if affected_rows == 0:
+                return None
+            
+            logger.info(f"Book updated: ID {book_id}")
+            return self.get_book_by_id(book_id)
+            
+        except Exception as e:
+            logger.error(f"Error updating book {book_id}: {e}")
+            raise
+
+    def delete_book(self, book_id: int) -> bool:
+        
+        try:
+            existing_book = self.get_book_by_id(book_id)
+            if not existing_book:
+                return False
+            
+            query = "DELETE FROM book WHERE id = ?"
+            affected_rows = self.db_service.execute_delete(query, [book_id])
+            
+            if affected_rows > 0:
+                logger.info(f"Book deleted: ID {book_id}")
+                return True
+            else:
+                logger.warning(f"No book found with ID {book_id} for deletion")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error deleting book {book_id}: {e}")
+            raise
     
     def get_authors(self) -> List[Dict[str, Any]]:
         

@@ -131,6 +131,70 @@ def create_book():
         }), 500
 
 
+@books_bp.route('/books/<int:book_id>', methods=['PUT'])
+def update_book(book_id: int):
+    try:
+        if not request.is_json:
+            raise ValueError("Request must be JSON")
+        
+        book_data = request.get_json()
+        if not book_data:
+            raise ValueError("Request body is required")
+        
+        book_service = get_book_service()
+        updated_book = book_service.update_book(book_id, book_data)
+        
+        if not updated_book:
+            return jsonify({
+                'error': 'Not found',
+                'message': f'Book with ID {book_id} not found'
+            }), 404
+        
+        logger.info(f"Book updated: ID {book_id}")
+        return jsonify({
+            'message': 'Book updated successfully',
+            'book': updated_book
+        }), 200
+        
+    except ValueError as e:
+        logger.warning(f"Invalid book data: {e}")
+        return jsonify({
+            'error': 'Invalid data',
+            'message': str(e)
+        }), 400
+    except Exception as e:
+        logger.error(f"Error updating book {book_id}: {e}")
+        return jsonify({
+            'error': 'Internal server error',
+            'message': 'Failed to update book'
+        }), 500
+
+
+@books_bp.route('/books/<int:book_id>', methods=['DELETE'])
+def delete_book(book_id: int):
+    try:
+        book_service = get_book_service()
+        deleted = book_service.delete_book(book_id)
+        
+        if not deleted:
+            return jsonify({
+                'error': 'Not found',
+                'message': f'Book with ID {book_id} not found'
+            }), 404
+        
+        logger.info(f"Book deleted: ID {book_id}")
+        return jsonify({
+            'message': 'Book deleted successfully'
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error deleting book {book_id}: {e}")
+        return jsonify({
+            'error': 'Internal server error',
+            'message': 'Failed to delete book'
+        }), 500
+
+
 @books_bp.route('/subjects', methods=['GET'])
 def get_subjects():
     try:
