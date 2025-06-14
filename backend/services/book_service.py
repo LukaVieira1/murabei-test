@@ -124,9 +124,13 @@ class BookService:
                 if not book_data.get(field):
                     raise ValueError(f"Missing required field: {field}")
             
-            fields = []
-            values = []
-            placeholders = []
+          
+            max_id_result = self.db_service.execute_query("SELECT MAX(id) FROM book")
+            next_id = (max_id_result[0][0] or 0) + 1 if max_id_result else 1
+            
+            fields = ['id']  
+            values = [next_id]
+            placeholders = ['?']
             
             field_mapping = {
                 'title': 'title',
@@ -152,7 +156,7 @@ class BookService:
                     values.append(book_data[api_field])
                     placeholders.append('?')
             
-            if not fields:
+            if len(fields) <= 1:  
                 raise ValueError("No valid fields provided for book creation")
             
             query = f"""
@@ -160,9 +164,13 @@ class BookService:
                 VALUES ({', '.join(placeholders)})
             """
             
-            book_id = self.db_service.execute_insert(query, values)
+            logger.info(f"Creating book with ID {next_id}: {book_data.get('title')}")
+            affected_rows = self.db_service.execute_insert(query, values)
             
-            return self.get_book_by_id(book_id)
+            if affected_rows == 0:
+                raise ValueError("Failed to insert book")
+            
+            return self.get_book_by_id(next_id)
             
         except Exception as e:
             logger.error(f"Error creating book: {e}")
