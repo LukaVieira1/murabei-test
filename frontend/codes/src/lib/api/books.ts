@@ -30,6 +30,22 @@ export const booksApi = {
       body: JSON.stringify(bookData),
     });
   },
+
+  updateBook: async (
+    id: number,
+    bookData: Partial<Omit<Book, "id">>
+  ): Promise<{ message: string; book: Book }> => {
+    return apiRequest(`${API_ENDPOINTS.BOOKS}/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(bookData),
+    });
+  },
+
+  deleteBook: async (id: number): Promise<{ message: string }> => {
+    return apiRequest(`${API_ENDPOINTS.BOOKS}/${id}`, {
+      method: "DELETE",
+    });
+  },
 };
 
 export async function getBooksSSR(
