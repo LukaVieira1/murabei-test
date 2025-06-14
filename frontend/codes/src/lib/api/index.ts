@@ -4,8 +4,6 @@ export { filtersApi } from "./filters";
 
 export type * from "../types";
 
-export { revalidateApiData } from "../utils/request";
-
 import { booksApi } from "./books";
 import { authorsApi } from "./authors";
 import { filtersApi } from "./filters";
