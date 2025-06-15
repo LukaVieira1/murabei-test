@@ -1,85 +1,471 @@
-# Murabei test
+# 📚 Murabei Books - Sistema de Gerenciamento de Livros
 
-## Description
+## 🚀 Projeto de Gerenciamento de Livros
 
-Esse e o teste para Desenvolvedor FullStack na Murabei Data Science, usando Docker, Python, Nextjs and sqlite3.
+Este é um sistema completo de gerenciamento de livros desenvolvido com **Next.js 14** (frontend) e **Python Flask** (backend), executando em containers Docker.
+O projeto foi desenvolvido como parte de um teste técnico para a **Murabei Data Science**.
 
-O objetivo deste teste e avaliar a capcidade do desenvolvedor em criar uma aplicacao Frontend e integra-la em uma API Python. Toda a aplicacao e mantida em containers Docker, e roda usando docker compose. Esta e a mesma arquitetura usada em todos os projetos internos da Murabei.
+## 📋 Funcionalidades
 
-## Instrucoes
+- Listagem paginada de livros
+- Criação de novos livros
+- Edição de livros existentes
+- Exclusão de livros
 
-O repositorio e dividido em 3 pastas:
+### Pré-requisitos
 
-- \_docker-compose
-- backend
-- frontend
+- Docker e Docker Compose instalados
+- Portas **3000** (frontend) e **5000** (backend) disponíveis
 
-Na pasta **_\_docker-compose_**, estao os arquivos responsaveis por subir todas as imagens Docker. Um **docker-compose.yml**, que possui as informacoes de quais containers e imagens devem subir; um script **docker-up.bash** que sobe os containers baseado no arquivo **docker-compose.yml**; e um arquivo **docker.log**, que armazena todos os logs da aplicacao.
+### 🔧 Instalação e Execução
 
-Ja na pasta **_backend_** esta a API de livros, em Python Flask. Esta API tem uma gama de operacoes basicas, como listagem de livros, criacao, busca por autor e titulo. Esta API ja esta pre-pronta, mas pode ser alterada de acordo com a sua necessidade, sem problemas.
+#### 1. Build do Backend
 
-Esta pasta possui um script **build.bash**, que builda a imagem docker a ser utilizada no **docker-compose.yml**.
+```bash
+cd backend
+./build.bash
+```
 
-E, a pasta **_frontend_**, onde devem ser colocados codigos do FE. Aqui na Murabei, utilizamos o NextJS como framework de React, logo, seu FE deve ser desenolvido em NextJS, pelo menos, na versao 13, que ja possui **_Server Components_** e **_Server Actions_**.
+#### 2. Build do Frontend
 
-## Inicializacao
+```bash
+cd .. (para voltar para a raiz do projeto)
+cd frontend/
+./build.bash
+```
 
-Clone o repositorio do Github, e va na pasta **_backend_**, e rode o script **_build.bash_**. Esse script ira buildar uma imagem docker local para o seu backend. Depois, va na pasta **_\_docker-compose_** e rode o script **_docker-up.bash_**, que ira subir o **docker-compose.yml**, subindo todos os servicos.
+#### 3. Subir os Serviços
 
-## Objetivos do Teste
+```bash
+cd .. (para voltar para a raiz do projeto)
+cd _docker-compose
+./docker-up.bash
+```
 
-O objetivo deste teste e avaliar a capacidade do desenvolvedor em refatorar e ajustar uma codebase inicial. O teste possui uma base de dados em SQLite3, que possui dados de livros, autores, editores e etc. A aplicacao atual lista e retorna apenas poucos items.
+#### 4. Acessar a Aplicação
 
-O desenvolvedor devera:
-- Refatorar o codigo;
-- Alterar o filtro para permitir que mais de um campo possa ser buscado ao mesmo tempo (concomitante);
-- Criar uma arquitetura de filtros que permite a inclusao de novo filtros ao longo do tempo e forma facil e segura;
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Backend Health Check**: [http://localhost:5000/health](http://localhost:5000/health)
+- **API Docs**: [http://localhost:5000/docs](http://localhost:5000/docs)
 
-O FE deve rodar junto com os outros servicos em docker, ou seja, deve ser adicionado um servico ao **docker-compose.yml** com o nome frontend. Para isso, o FE precisa de um **_Dockerfile_**, e de um script **_build.bash_**, como o servico da API.
+---
 
-**IMPORTANTE**: ao rodar o **docker-compose.yml**, o FE deve subir junto com os outros servicos.
+#### 5. Executar os Testes E2E (Cypress)
 
-## Avaliacao
+Verifique se seu frontend realmente está rodando na porta 3000.
 
-Aqui vao os pontos que sera avaliados no teste:
+Pare o container caso esteja rodando e va para a raiz do projeto
 
-**_Obrigatorios_**
+```bash
+cd _docker-compose
+./docker-e2e-env-up.bash
+cd .. (para voltar para a raiz do projeto)
+cd frontend/
+cd codes/
 
-**_Funcionais_**
-- O FE deve possuir uma imagem docker, e rodar junto com os outros servicos no **_docker-compose.yml_** (1 ponto)
-- Os filtros deverao estar funcionais, filtrando por cada campo individualmente (1 ponto)
-- Os filtros poderao ser acumulados, ou seja, ao buscar por titulo E editora, o resultado sera a combinacao dos campos (2 pontos)
-- As telas devem ser feitas usando componentes da biblioteca [shadcn/ui](https://ui.shadcn.com/) (1 ponto)
-- Estados vazios tratados (sem resultados, filtros parciais). (1 pt)
-- Performance: Filtros com debounce para evitar chamadas excessivas à API. (Bônus 1 pt)
+npm run cypress:open # testes com a ferramenta visual do cypress
+## ou
+npm run cypress:run # testes no terminal
+```
 
+Para voltar para o ambiente de desenvolvimento, pare o container e execute o bash ./docker-up.bash
 
-**_Codigo_**
-- O filtro e um componente independente to resto da tela (1 ponto);
-- O filtro permite que outros campos possam ser adicionados posteriormente (1 ponto);
-- O filtro devera implementar alguma forma de Gerenciamento de estado escalável (2 pontos);
-- O filtro deve ser testado, de preferencia com uma ferramenta e2e, como o Cypress (2 pontos);
+## 🏗️ Decisões Técnicas
 
-**Total: 7 pontos**
+### 🐳 **Containerização e Orquestração**
 
-**_Pontos extras_**
+**Docker Multi-Service**: A aplicação foi containerizada com Docker e orquestrada via Docker Compose, permitindo que frontend e backend rodem juntos de forma isolada e reproduzível. O frontend possui sua própria imagem Docker otimizada com multi-stage builds para produção.
 
-- Fazer o deploy publico da aplicacao em qualquer servico que aceite as imagens docker (1 ponto)
-- Adicionar testes (unitarios ou end-to-end) (1 pontos)
-- Uso do Typescript (1 ponto)
+### 🔍 **Sistema de Filtros Avançados**
 
-**Total: 3 pontos**
+#### **Filtros Individuais e Acumulativos**
 
-### Criterios tecnicos
+Implementamos um sistema robusto que permite:
 
-Alem da avaliacao das funcionalidades do FE, tambem serao levados em consideracao aspectos tecnicos como:
+- **Filtros individuais**: Cada campo (título, autor, editora, sinopse, páginas, formato) funciona independentemente
+- **Filtros acumulativos**: Múltiplos filtros podem ser combinados simultaneamente (ex: título + editora + faixa de páginas)
+- **Persistência via URL**: Os filtros são sincronizados com a URL, permitindo compartilhamento e navegação com estado preservado
 
-- Componentizacao:
-  - Criacao de componentes reutilizaveis
-- Organizacao
-  - Clareza e legibilidade do codigo
-  - Comentarios e documentacao
-  - Organizacao clara das pastas e arquivos
-- Principios
-  - Clean Code
-  - DRY
+#### **Arquitetura Modular e Extensível**
+
+```typescript
+// Estrutura que permite fácil adição de novos filtros
+interface BookFilters {
+  title?: string;
+  author?: string;
+  publisher?: string;
+  // Novos filtros podem ser adicionados aqui facilmente
+}
+```
+
+O componente `FiltersSidebar` é completamente independente e pode ser reutilizado em outras telas. A arquitetura permite adicionar novos campos de filtro sem modificar a lógica central.
+
+### ⚡ **Performance e Otimização**
+
+#### **Debounce para Busca**
+
+Implementamos debounce de 500ms na busca por texto para evitar chamadas excessivas à API
+
+#### **Server-Side Rendering (SSR)**
+
+- Filtros aplicados no servidor para SEO e performance inicial
+- Hidratação suave no cliente para interatividade
+- Cache otimizado do Next.js para respostas rápidas
+
+### 🎨 **Interface de Usuário**
+
+#### **shadcn/ui + Tailwind CSS**
+
+Utilizamos exclusivamente componentes da biblioteca shadcn/ui para garantir:
+
+- **Consistência visual**: Design system unificado
+- **Acessibilidade**: Componentes com ARIA labels e navegação por teclado
+- **Responsividade**: Mobile-first design
+- **Customização**: Temas e variantes facilmente modificáveis
+
+#### **Estados Vazios e Loading**
+
+Tratamento completo de estados da aplicação:
+
+- **Loading states**: Skeletons durante carregamento
+- **Estados vazios**: Mensagens informativas quando não há resultados
+- **Estados de erro**: Feedback claro para problemas de conectividade
+- **Filtros parciais**: Indicadores visuais de filtros ativos
+
+### 🏛️ **Gerenciamento de Estado Escalável**
+
+#### **URL-Based State Management - A Solução Mais Escalável**
+
+Implementamos gerenciamento de estado baseado em URL, que é **a melhor opção para filtros** no Next.js 13/14, superando bibliotecas como Redux ou Zustand:
+
+**Por que URL + useSearchParams é a abordagem mais escalável:**
+
+- ✅ **Compartilhamento de Estado**: URLs podem ser compartilhadas, bookmarkadas e enviadas
+- ✅ **SSR Nativo**: Funciona perfeitamente com Server Components sem hidratação complexa
+- ✅ **Navegação Intuitiva**: Back/forward do navegador preserva estado automaticamente
+- ✅ **SEO Otimizado**: URLs semânticas indexáveis por motores de busca
+- ✅ **Cache Inteligente**: Compatível com sistema de cache do Next.js
+- ✅ **Sincronização Automática**: Estado sempre sincronizado entre server e client
+
+**Implementação Real:**
+
+```typescript
+// Server Component - recebe filtros via searchParams
+export default function HomePage({ searchParams }: PageProps) {
+  const filters = parseSearchParams(searchParams);
+  const booksData = await fetchBooks(filters); // SSR otimizado
+  // ...
+}
+
+// Client Component - sincroniza com URL
+const searchParams = useSearchParams();
+const router = useRouter();
+
+const updateFilters = (newFilters: BookFilters) => {
+  const params = new URLSearchParams();
+  Object.entries(newFilters).forEach(([key, value]) => {
+    if (value) params.set(key, String(value));
+  });
+  router.push(`/?${params.toString()}`);
+};
+```
+
+#### **Fetch Nativo Otimizado para SSR**
+
+Utilizamos o **fetch nativo do Next.js** em vez de bibliotecas como Axios, pois é otimizado para SSR:
+
+```typescript
+// request.ts - Fetch otimizado com cache
+const requestOptions: RequestInit = {
+  headers: { "Content-Type": "application/json" },
+  ...options,
+};
+
+// Cache automático no servidor para performance
+if (isServer && (!options.method || options.method === "GET")) {
+  requestOptions.next = {
+    revalidate: API_CONFIG.CACHE_DURATION, // Cache inteligente
+    tags: ["api-data"], // Invalidação seletiva
+  };
+}
+
+const response = await fetch(url, requestOptions);
+```
+
+**Vantagens do Fetch Nativo:**
+
+- ⚡ **Performance**: Cache automático e revalidação inteligente
+- 🔄 **Streaming**: Suporte nativo a Server Components
+- 📦 **Bundle Size**: Sem dependências externas
+- 🛠️ **Integração**: Funciona perfeitamente com App Router
+
+### 🧪 **Estratégia de Testes E2E**
+
+#### **Cypress com Sistema de Mocks Inteligente**
+
+Desenvolvi uma solução para contornar limitações do Cypress com SSR:
+
+**🚨 Problema Identificado**:
+Os interceptors do Cypress não funcionam com Next.js SSR, pois as requisições acontecem no servidor durante o Server-Side Rendering, antes da hidratação no cliente.
+
+**💡 Solução Implementada**:
+
+**1. Sistema de Detecção de Ambiente:**
+
+```typescript
+// request.ts - Detecção inteligente de ambiente de teste
+const isCypress = process.env.NEXT_PUBLIC_IS_CYPRESS_TEST === "true";
+
+if (isCypress) {
+  console.log("🧪 Test mode detected - using mock data");
+  // Retorna dados mockados com filtros funcionais
+  return filteredMockResponse;
+}
+```
+
+**2. Docker Compose Específico para E2E:**
+
+```yaml
+# docker-compose-e2e.yml
+services:
+  frontend:
+    environment:
+      - NEXT_PUBLIC_IS_CYPRESS_TEST=true # Ativa modo de teste
+```
+
+**3. Script de Inicialização para Testes:**
+
+```bash
+# docker-e2e-env-up.bash
+docker compose -f docker-compose-e2e.yml up --force-recreate
+```
+
+**4. Mocks com Filtros Funcionais:**
+
+```typescript
+// Sistema de mocks que simula filtros reais
+let filteredBooks = [...MOCK_BOOKS_RESPONSE.books];
+
+// Aplica filtros nos dados mockados
+if (title) {
+  filteredBooks = filteredBooks.filter((book) =>
+    book.title.toLowerCase().includes(title.toLowerCase())
+  );
+}
+// ... outros filtros (author, publisher, format, pages)
+```
+
+**🎯 Cobertura Completa de Testes**:
+
+- ✅ **00-mock-verification**: Garante dados mockados (6 livros)
+- ✅ **01-home-page**: Testa carregamento e responsividade
+- ✅ **02-search-and-filters**: Valida filtros individuais e combinados
+- ✅ **03-book-management**: Testa CRUD completo
+- ✅ **04-pagination-and-navigation**: Valida navegação entre páginas
+
+**🔧 Vantagens da Solução:**
+
+- 🎯 **Dados Mockados**: Sempre os mesmos 6 livros para testes consistentes
+- ⚡ **Performance**: Sem dependência de backend real durante testes
+- 🔄 **Filtros Funcionais**: Mocks simulam comportamento real da API
+- 🐳 **Isolamento**: Ambiente de teste completamente isolado via Docker
+
+### 🏗️ **Arquitetura Frontend**
+
+#### **Next.js 14 App Router**
+
+- **Server Components**: Para performance e SEO
+- **Client Components**: Para interatividade
+- **Server Actions**: Para operações de dados
+- **Streaming**: Para carregamento progressivo
+
+#### **Organização de Código**
+
+```
+src/
+├── app/          # App Router (páginas e layouts)
+├── components/   # Componentes reutilizáveis
+│   └── ui/      # shadcn/ui components
+├── lib/         # Utilitários e APIs
+│   ├── api/     # Chamadas para backend
+│   ├── types/   # Definições TypeScript
+│   └── utils/   # Helpers e mocks
+└── hooks/       # Custom React Hooks
+```
+
+### 🔧 **Backend (Python Flask)**
+
+#### **Arquitetura Limpa**
+
+- **Separação de responsabilidades**: Models, Services, Routes, Filters
+- **Sistema de filtros modular**: Facilita adição de novos filtros
+- **Middleware customizado**: Logging e tratamento de erros
+- **Container de dependências**: Injeção de dependências
+
+#### **API RESTful**
+
+- **Endpoints semânticos**: `/api/books`, `/api/authors`
+- **Filtros via query params**: Suporte a múltiplos filtros
+- **Paginação**: Controle de performance
+
+### 🚀 **DevOps**
+
+#### **Docker Compose**
+
+- **Orquestração**: Frontend + Backend + Banco
+- **Logs centralizados**: Debugging facilitado
+- **Rede isolada**: Comunicação segura entre serviços
+
+---
+
+## 📋 Funcionalidades
+
+### 🔍 Sistema de Filtros Avançados
+
+- Busca por título, autor, editora, sinopse
+- Filtros por número de páginas (min/max)
+- Filtros por formato do livro
+- Ordenação customizável
+- **Filtros acumulativos** - combine múltiplos critérios
+- **Debounce** para otimização de performance
+- **Sincronização com URL** - compartilhe filtros via link
+
+### 📚 Gerenciamento de Livros
+
+- Listagem paginada de livros
+- Criação de novos livros
+- Edição de livros existentes
+- Exclusão de livros
+- Estados vazios tratados
+
+### 🎨 Interface de Usuário
+
+- Design responsivo (mobile-first)
+- Componentes reutilizáveis (shadcn/ui)
+- Animações suaves (Framer Motion)
+- Loading states e error handling
+
+### 🧪 Testes
+
+- **Cypress E2E**: Cobertura completa dos fluxos
+
+---
+
+## 📖 Documentação Detalhada
+
+### 🎯 Frontend
+
+- [📘 Documentação do Frontend](./frontend/codes/README.md)
+
+### ⚙️ Backend
+
+- [📗 Documentação da API](./backend/README.md)
+
+## 📁 Estrutura do Projeto
+
+```
+murabei-books/
+├── 📁 _docker-compose/          # Configurações Docker
+│   ├── docker-compose.yml      # Orquestração dos serviços
+│   ├── docker-compose-e2e.yml # Orquestração dos serviços para testes E2E
+│   ├── docker-up.bash         # Script de inicialização
+│   ├── docker-e2e-env-up.bash # Script de inicialização para testes E2E
+│   └── docker.log             # Logs centralizados
+│
+├── 📁 backend/                 # API Python Flask
+│   ├── 📁 core/               # Configurações centrais
+│   │   ├── __init__.py       # Inicialização do módulo
+│   │   └── container.py      # Container de dependências
+│   ├── 📁 models/             # Modelos de dados (SQLAlchemy)
+│   │   ├── __init__.py       # Inicialização do módulo
+│   │   ├── book.py          # Modelo de livros
+│   │   └── author.py        # Modelo de autores
+│   ├── 📁 routes/             # Endpoints da API
+│   │   ├── __init__.py       # Inicialização do módulo
+│   │   ├── books.py         # Rotas de livros
+│   │   ├── authors.py       # Rotas de autores
+│   │   └── health.py        # Health check
+│   ├── 📁 services/           # Lógica de negócio
+│   │   ├── __init__.py       # Inicialização do módulo
+│   │   ├── book_service.py  # Serviços de livros
+│   │   └── database_service.py # Serviços de banco
+│   ├── 📁 filters/            # Sistema de filtros
+│   │   ├── __init__.py       # Inicialização do módulo
+│   │   ├── base_filter.py   # Filtro base
+│   │   └── book_filters.py  # Filtros de livros
+│   ├── 📁 middleware/         # Middlewares da aplicação
+│   │   ├── __init__.py       # Inicialização do módulo
+│   │   └── logging_middleware.py # Middleware de logs
+│   ├── app.py                # Aplicação principal Flask
+│   ├── config.py             # Configurações da aplicação
+│   ├── db.sqlite             # Banco de dados SQLite
+│   ├── books.json            # Dados de exemplo
+│   ├── requirements.txt      # Dependências Python
+│   ├── Dockerfile            # Container do backend
+│   ├── build.bash           # Script de build
+│   └── README_REFACTORING.md # Documentação de refatoração
+│
+├── 📁 frontend/               # Aplicação Next.js
+│   └── codes/                # Código fonte do frontend
+│       ├── 📁 src/           # Código fonte principal
+│       │   ├── 📁 app/       # App Router (Next.js 14)
+│       │   │   ├── page.tsx  # Página principal
+│       │   │   ├── layout.tsx # Layout da aplicação
+│       │   │   ├── globals.css # Estilos globais
+│       │   │   ├── favicon.ico # Ícone da aplicação
+│       │   │   └── fonts/    # Fontes customizadas
+│       │   ├── 📁 components/ # Componentes React
+│       │   │   ├── 📁 ui/    # Componentes shadcn/ui
+│       │   │   │   ├── button.tsx # Botões
+│       │   │   │   ├── input.tsx  # Inputs
+│       │   │   │   ├── dialog.tsx # Modais
+│       │   │   │   ├── card.tsx   # Cards
+│       │   │   │   └── ... # Outros componentes UI
+│       │   │   ├── BooksGrid.tsx # Grid de livros
+│       │   │   ├── BooksList.tsx # Lista de livros
+│       │   │   ├── FiltersSidebar.tsx # Sidebar de filtros
+│       │   │   ├── SearchBar.tsx # Barra de busca
+│       │   │   ├── Pagination.tsx # Paginação
+│       │   │   ├── CreateBookModal.tsx # Modal de criação
+│       │   │   ├── EditBookModal.tsx # Modal de edição
+│       │   │   ├── BookActionsDropdown.tsx # Ações dos livros
+│       │   │   └── HomePageClient.tsx # Cliente da home
+│       │   ├── 📁 lib/        # Bibliotecas e utilitários
+│       │   │   ├── 📁 api/    # Chamadas para API
+│       │   │   │   ├── books.ts # API de livros
+│       │   │   │   ├── authors.ts # API de autores
+│       │   │   │   ├── filters.ts # API de filtros
+│       │   │   │   └── index.ts # Exportações
+│       │   │   ├── 📁 types/  # Definições TypeScript
+│       │   │   │   └── index.ts # Tipos principais
+│       │   │   ├── 📁 utils/  # Utilitários
+│       │   │   │   └── request.ts # Cliente HTTP + Mocks
+│       │   │   ├── 📁 actions/ # Server Actions
+│       │   │   └── 📁 config/ # Configurações
+│       │   ├── 📁 hooks/      # Custom React Hooks
+│       │   └── 📁 utils/      # Utilitários gerais
+│       ├── 📁 cypress/        # Testes E2E
+│       │   ├── 📁 e2e/        # Testes end-to-end
+│       │   │   ├── 00-mock-verification.cy.ts # Verificação de mocks
+│       │   │   ├── 01-home-page.cy.ts # Testes da home
+│       │   │   ├── 02-search-and-filters.cy.ts # Testes de filtros
+│       │   │   ├── 03-book-management.cy.ts # Testes CRUD
+│       │   │   └── 04-pagination-and-navigation.cy.ts # Testes de navegação
+│       │   ├── 📁 support/    # Configurações do Cypress
+│       │   ├── 📁 component/  # Testes de componentes
+│       │   ├── 📁 screenshots/ # Screenshots dos testes
+│       │   └── 📁 videos/     # Vídeos dos testes
+│       ├── cypress.config.ts  # Configuração do Cypress
+│       ├── next.config.mjs    # Configuração do Next.js
+│       ├── tailwind.config.ts # Configuração do Tailwind
+│       ├── tsconfig.json      # Configuração TypeScript
+│       ├── package.json       # Dependências e scripts
+│       ├── components.json    # Configuração shadcn/ui
+│       ├── postcss.config.mjs # Configuração PostCSS
+│       ├── .eslintrc.json     # Configuração ESLint
+│       ├── Dockerfile         # Container do frontend
+│       ├── build.bash         # Script de build
+│       └── README.md          # Documentação do frontend
+│
+└── README.md                 # Esta documentação
+```
