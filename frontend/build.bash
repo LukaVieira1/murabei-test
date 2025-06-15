@@ -1,2 +1,3 @@
 # This script is used to build the frontend image
-docker build -t frontend:latest . 
+cd codes && npm install
+cd .. && docker build -t frontend:latest . 
