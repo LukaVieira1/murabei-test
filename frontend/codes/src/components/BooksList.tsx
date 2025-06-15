@@ -23,12 +23,13 @@ export default function BooksList({ data }: BooksListProps) {
     router.refresh();
   };
 
-  console.log(data);
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-foreground">
+        <h2
+          data-testid="books-count"
+          className="text-xl font-semibold text-foreground"
+        >
           {pagination.total_count === 0
             ? "No results found"
             : `${pagination.total_count} book${

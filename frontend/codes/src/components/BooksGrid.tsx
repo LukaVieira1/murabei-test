@@ -206,10 +206,16 @@ function BookCard({ book, onRefresh }: BookCardProps) {
   return (
     <>
       <motion.div variants={itemVariants}>
-        <Card className="h-80 hover:shadow-lg transition-all duration-300 group cursor-pointer flex flex-col bg-card border-border">
+        <Card
+          data-testid="book-card"
+          className="h-80 hover:shadow-lg transition-all duration-300 group cursor-pointer flex flex-col bg-card border-border"
+        >
           <CardHeader className="pb-3 flex-shrink-0">
             <div className="flex items-start justify-between mb-2">
-              <CardTitle className="text-base font-semibold line-clamp-2 group-hover:text-primary transition-colors flex-1 pr-2">
+              <CardTitle
+                data-testid="book-title"
+                className="text-base font-semibold line-clamp-2 group-hover:text-primary transition-colors flex-1 pr-2"
+              >
                 {stripHtmlTags(book.title)}
               </CardTitle>
               <div className="flex items-center gap-2 flex-shrink-0">

@@ -80,6 +80,7 @@ export default function BookActionsDropdown({
             variant="ghost"
             size="sm"
             className="h-8 w-8 p-0 hover:bg-muted"
+            data-testid="book-actions-dropdown"
           >
             <MoreVertical className="h-4 w-4" />
             <span className="sr-only">Open menu</span>
@@ -89,6 +90,7 @@ export default function BookActionsDropdown({
           <DropdownMenuItem
             onClick={() => setIsEditModalOpen(true)}
             className="cursor-pointer"
+            data-testid="edit-book-option"
           >
             <Edit className="mr-2 h-4 w-4" />
             Edit
@@ -96,6 +98,7 @@ export default function BookActionsDropdown({
           <DropdownMenuItem
             onClick={() => setIsDeleteDialogOpen(true)}
             className="cursor-pointer text-red-600 focus:text-red-600"
+            data-testid="delete-book-option"
           >
             <Trash2 className="mr-2 h-4 w-4" />
             Delete
@@ -111,7 +114,7 @@ export default function BookActionsDropdown({
       />
 
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent data-testid="confirm-delete-modal">
           <DialogHeader>
             <DialogTitle>Are you sure?</DialogTitle>
             <DialogDescription>
@@ -124,6 +127,7 @@ export default function BookActionsDropdown({
               variant="outline"
               onClick={() => setIsDeleteDialogOpen(false)}
               disabled={isDeleting}
+              data-testid="cancel-delete-button"
             >
               Cancel
             </Button>
@@ -131,6 +135,7 @@ export default function BookActionsDropdown({
               onClick={handleDelete}
               disabled={isDeleting}
               className="bg-red-600 hover:bg-red-700"
+              data-testid="confirm-delete-button"
             >
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>

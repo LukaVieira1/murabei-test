@@ -58,8 +58,14 @@ export default function Pagination({
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
-      <div className="text-sm text-muted-foreground order-2 sm:order-1">
+    <div
+      className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2"
+      data-testid="pagination"
+    >
+      <div
+        className="text-sm text-muted-foreground order-2 sm:order-1"
+        data-testid="results-range"
+      >
         Showing <span className="font-medium text-foreground">{startItem}</span>{" "}
         to <span className="font-medium text-foreground">{endItem}</span> of{" "}
         <span className="font-medium text-foreground">{total}</span> results
@@ -72,6 +78,8 @@ export default function Pagination({
           onClick={() => onPageChange(1)}
           disabled={current === 1}
           className="hidden sm:flex h-8 w-8 p-0 hover-glow-primary"
+          data-testid="first-page"
+          aria-label="First page"
         >
           <ChevronsLeft className="h-4 w-4" />
         </Button>
@@ -82,6 +90,8 @@ export default function Pagination({
           onClick={() => onPageChange(current - 1)}
           disabled={current === 1}
           className="h-8 px-2 sm:px-3 hover-glow-primary"
+          data-testid="previous-page"
+          aria-label="Previous page"
         >
           <ChevronLeft className="h-4 w-4" />
           <span className="hidden sm:inline ml-1">Previous</span>
@@ -111,6 +121,9 @@ export default function Pagination({
                     ? "h-8 w-8 p-0 bg-gradient-primary text-primary-foreground hover-glow-primary"
                     : "h-8 w-8 p-0 hover-glow-secondary"
                 }
+                data-testid={`page-${page}`}
+                aria-label={`Go to page ${page}`}
+                aria-current={current === page ? "page" : undefined}
               >
                 {page}
               </Button>
@@ -124,6 +137,8 @@ export default function Pagination({
           onClick={() => onPageChange(current + 1)}
           disabled={current === pages}
           className="h-8 px-2 sm:px-3 hover-glow-primary"
+          data-testid="next-page"
+          aria-label="Next page"
         >
           <span className="hidden sm:inline mr-1">Next</span>
           <ChevronRight className="h-4 w-4" />
@@ -135,6 +150,8 @@ export default function Pagination({
           onClick={() => onPageChange(pages)}
           disabled={current === pages}
           className="hidden sm:flex h-8 w-8 p-0 hover-glow-primary"
+          data-testid="last-page"
+          aria-label="Last page"
         >
           <ChevronsRight className="h-4 w-4" />
         </Button>

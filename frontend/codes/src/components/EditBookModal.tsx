@@ -166,6 +166,7 @@ export default function EditBookModal({
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent
+        data-testid="edit-book-modal"
         className="max-w-2xl max-h-[90vh] sm:max-h-[80vh] w-[90vw] sm:w-full mx-auto rounded-lg sm:rounded-xl flex flex-col"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >

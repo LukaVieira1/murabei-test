@@ -141,6 +141,7 @@ export default function FiltersSidebar({
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed right-0 top-0 h-full w-96 bg-card shadow-2xl z-50 overflow-y-auto border-l border-border"
+            data-testid="filters-sidebar"
           >
             <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between z-10">
               <div className="flex items-center gap-2">
@@ -162,6 +163,7 @@ export default function FiltersSidebar({
                 size="sm"
                 onClick={onClose}
                 className="hover:bg-accent"
+                data-testid="close-filters"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -187,6 +189,7 @@ export default function FiltersSidebar({
                     </Label>
                     <Input
                       id="author"
+                      name="author"
                       type="text"
                       placeholder="Author name..."
                       value={localFilters.author || ""}
@@ -207,6 +210,7 @@ export default function FiltersSidebar({
                     </Label>
                     <Input
                       id="publisher"
+                      name="publisher"
                       type="text"
                       placeholder="Publisher name..."
                       value={localFilters.publisher || ""}
@@ -278,6 +282,7 @@ export default function FiltersSidebar({
                       <div>
                         <Input
                           type="number"
+                          name="pages_min"
                           placeholder="Min"
                           min="1"
                           value={localFilters.pages_min || ""}
@@ -295,6 +300,7 @@ export default function FiltersSidebar({
                       <div>
                         <Input
                           type="number"
+                          name="pages_max"
                           placeholder="Max"
                           min="1"
                           value={localFilters.pages_max || ""}
@@ -357,7 +363,10 @@ export default function FiltersSidebar({
                         )
                       }
                     >
-                      <SelectTrigger className="h-9">
+                      <SelectTrigger
+                        className="h-9"
+                        data-testid="format-select"
+                      >
                         <SelectValue placeholder="Select..." />
                       </SelectTrigger>
                       <SelectContent>
@@ -366,6 +375,18 @@ export default function FiltersSidebar({
                         <SelectItem value="author">Author</SelectItem>
                         <SelectItem value="publisher">Publisher</SelectItem>
                         <SelectItem value="pages">Pages</SelectItem>
+                        <SelectItem
+                          value="Digital"
+                          data-testid="format-option-Digital"
+                        >
+                          Digital
+                        </SelectItem>
+                        <SelectItem
+                          value="Physical"
+                          data-testid="format-option-Physical"
+                        >
+                          Physical
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -413,11 +434,16 @@ export default function FiltersSidebar({
                   onClick={handleClearFilters}
                   className="flex-1"
                   disabled={activeFiltersCount === 0}
+                  data-testid="clear-filters"
                 >
                   <X className="h-4 w-4 mr-2" />
                   Clear All
                 </Button>
-                <Button onClick={handleApplyFilters} className="flex-1">
+                <Button
+                  onClick={handleApplyFilters}
+                  className="flex-1"
+                  data-testid="apply-filters"
+                >
                   Apply Filters
                 </Button>
               </div>

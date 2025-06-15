@@ -160,7 +160,10 @@ export default function CreateBookModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] sm:max-h-[80vh] w-[90vw] sm:w-full mx-auto rounded-lg sm:rounded-xl flex flex-col">
+      <DialogContent
+        data-testid="create-book-modal"
+        className="max-w-2xl max-h-[90vh] sm:max-h-[80vh] w-[90vw] sm:w-full mx-auto rounded-lg sm:rounded-xl flex flex-col"
+      >
         <DialogHeader className="flex-shrink-0 p-4 sm:p-6 pb-0">
           <DialogTitle className="flex items-center justify-between text-lg sm:text-xl font-bold pr-8 leading-tight">
             Create New Book
@@ -189,6 +192,12 @@ export default function CreateBookModal({
                   required
                   disabled={isLoading}
                 />
+                <div
+                  data-testid="title-error"
+                  className="hidden text-xs text-red-500"
+                >
+                  Title is required
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -202,6 +211,12 @@ export default function CreateBookModal({
                   required
                   disabled={isLoading}
                 />
+                <div
+                  data-testid="author-error"
+                  className="hidden text-xs text-red-500"
+                >
+                  Author is required
+                </div>
               </div>
             </div>
 
@@ -374,6 +389,7 @@ export default function CreateBookModal({
               onClick={handleClose}
               disabled={isLoading}
               className="w-full sm:w-auto flex-1"
+              data-testid="close-modal"
             >
               Cancel
             </Button>
