@@ -63,3 +63,7 @@ dist/
 .env.local
 .env.production
 .env.staging
+
+
+frontend/codes/cypress/screenshots/
+frontend/codes/cypress/videos/
