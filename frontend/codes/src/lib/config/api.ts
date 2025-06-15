@@ -1,5 +1,8 @@
 export const API_CONFIG = {
-  BASE_URL: process.env.API_URL || "http://localhost:5000",
+  BASE_URL:
+    typeof window === "undefined"
+      ? process.env.API_URL || "http://localhost:5000"
+      : "",
   TIMEOUT: 10000,
   CACHE_DURATION: 60,
   RETRY_ATTEMPTS: 3,
