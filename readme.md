@@ -6,6 +6,10 @@
 
 **[https://murabeibooks.lukavieira.tech/](https://murabeibooks.lukavieira.tech/)**
 
+O link acima está sem o certificado TLS (isso é feito por um processo automático no railway e pode demorar até 3 dias), embora acessivel precisa clicar em avançar para prosseguir.
+
+**[murabei-test-production.up.railway.app](murabei-test-production.up.railway.app)**
+
 A aplicação está hospedada em produção e totalmente funcional. Você pode:
 
 - ✅ Navegar pelos livros da biblioteca
